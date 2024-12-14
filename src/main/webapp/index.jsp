@@ -12,6 +12,9 @@
 
     <body>
         <p class="font-semibold text-xl text-sky-600">Hello world !!!!!</p>
+        <a href="./views/login.jsp">
+            <button class="font-semibold text-xl text-sky-600">Login</button>
+        </a>
     </body>
 
     </html>

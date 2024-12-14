@@ -18,6 +18,7 @@ public class UserDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
+            System.out.print(username + " " + password);
             if (rs.next()) {
                 String hashedPassword = rs.getString("password");
                 if (PasswordUtils.checkPassword(password, hashedPassword)) {

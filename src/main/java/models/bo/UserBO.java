@@ -13,4 +13,8 @@ public class UserBO {
     public User checkLogin(String username, String password) {
         return userDAO.getUser(username, password);
     }
+
+    public boolean registerUser(User user) {
+        return userDAO.insertUser(user);
+    }
 }

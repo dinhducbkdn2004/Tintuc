@@ -33,4 +33,21 @@ public class UserDAO {
         }
         return user;
     }
+
+    public boolean insertUser(User user) {
+        try (Connection conn = ConnectDB.getConnection()) {
+            String sql = "INSERT INTO user (username, password, name, role) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
+            ps.setString(2, hashedPassword);
+            ps.setString(3, user.getName());
+            ps.setString(4, "user"); // mặc định user mới đăng ký sẽ là user
+            int result = ps.executeUpdate();
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

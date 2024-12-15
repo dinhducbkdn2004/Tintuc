@@ -12,7 +12,12 @@ public class CSRFFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        // Đảm bảo xử lý UTF-8 cho request và response
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(true);
 
         // Generate CSRF token if not present
@@ -29,7 +34,6 @@ public class CSRFFilter implements Filter {
             System.out.println("Request CSRF Token: " + csrfToken);
 
             if (sessionToken == null || !sessionToken.equals(csrfToken)) {
-                HttpServletResponse httpResponse = (HttpServletResponse) response;
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF token");
                 return;
             }

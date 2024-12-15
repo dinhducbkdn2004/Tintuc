@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
   <%@ page import="javax.servlet.http.HttpServletRequest" %>
     <% String path=request.getContextPath(); %>
       <!DOCTYPE html>
@@ -7,6 +7,7 @@
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
         <title>Đăng ký tài khoản</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -49,8 +50,8 @@
       </head>
 
       <body>
-        <iframe class="w-full h-[110px]" src="./header.jsp" frameborder="0" loading="eager"></iframe>
-        <iframe class="w-full h-8 sticky top-[-1px] z-10" src="./navigation.jsp" frameborder="0"
+        <iframe class="w-full h-[110px]" src="<%= path %>/views/header.jsp" frameborder="0" loading="eager"></iframe>
+        <iframe class="w-full h-8 sticky top-[-1px] z-10" src="<%= path %>/views/navigation.jsp" frameborder="0"
           loading="eager"></iframe>
         <main class="h-[calc(100vh-150px)]">
           <div class="main-wrapper flex-center h-full">
@@ -69,8 +70,7 @@
                     placeholder="Nhập tên của bạn" required />
                 </div>
                 <div class="space-y-1">
-                  <label for="username" class="text-sm font-semibold text-gray-700">Tên đăng nhập <span
-                      class="text-[#ed1b24]">*</span>
+                  <label for="username" class="text-sm font-semibold text-gray-700">Tên đăng nhập <span class="text-[#ed1b24]">*</span>
                   </label>
                   <input id="username" name="username" type="text"
                     class="w-full border border-gray-200 rounded p-2 text-sm" placeholder="Nhập tên đăng nhập"
@@ -80,8 +80,7 @@
                   </p>
                 </div>
                 <div class="space-y-1">
-                  <label for="password" class="text-sm font-semibold text-gray-700">Mật khẩu <span
-                      class="text-[#ed1b24]">*</span>
+                  <label for="password" class="text-sm font-semibold text-gray-700">Mật khẩu <span class="text-[#ed1b24]">*</span>
                   </label>
                   <input id="password" name="password" type="password"
                     class="w-full border border-gray-200 rounded p-2 text-sm" placeholder="Nhập mật khẩu" required />
@@ -90,8 +89,7 @@
                   </p>
                 </div>
                 <div class="space-y-1">
-                  <label for="re-password" class="text-sm font-semibold text-gray-700">Xác nhận mật khẩu <span
-                      class="text-[#ed1b24]">*</span>
+                  <label for="re-password" class="text-sm font-semibold text-gray-700">Xác nhận mật khẩu <span class="text-[#ed1b24]">*</span>
                   </label>
                   <input id="re-password" name="re-password" type="password"
                     class="w-full border border-gray-200 rounded p-2 text-sm" placeholder="Nhập lại mật khẩu"

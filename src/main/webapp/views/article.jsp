@@ -1,7 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="javax.servlet.http.HttpServletRequest" %>
+<%@ page import="models.bean.Article, models.bean.Comment" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%
     String path = request.getContextPath();
+    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd/MM/yyyy, HH:mm", new java.util.Locale("vi", "VN"));
+    SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy, HH:mm", new java.util.Locale("vi", "VN"));
+    // Temporary data for testing
+    Article article = new Article("1", "Thủ tướng Chính phủ yêu cầu kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất", "Thời sự", "https://cdnmedia.baotintuc.vn/Upload/DMDnZyELa7xUDTdLsa19w/files/2024/12/1412/dau-gia-141224.jpg", "<p>Công điện gửi Bộ trưởng các Bộ: Tài nguyên và Môi trường, Xây dựng, Tài chính, Tư pháp, Công an; Chủ tịch Ủy ban nhân dân các tỉnh, thành phố trực thuộc Trung ương.</p><p>Công điện nêu: Ngày 21/8/2024, Thủ tướng Chính phủ đã có Công điện số 82/CĐ-TTg chỉ đạo các địa phương kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất và đã đạt kết quả nhất định, từng bước đưa công tác đấu giá quyền sử dụng đất đi vào nề nếp, góp phần bổ sung nguồn thu cho ngân sách địa phương. Tuy nhiên, công tác tổ chức đấu giá quyền sử dụng đất tại một số địa phương vẫn còn những tồn tại, hạn chế nhất định như hiện tượng người tham gia đấu giá trả giá cao bất thường, có dấu hiệu thổi giá, hoặc thông đồng, cấu kết thao túng giá để trục lợi, gây nhiễu loạn thị trường, ảnh hưởng đến sự phát triển lành mạnh của thị trường bất động sản. Tình trạng này đang thu hút sự quan tâm của dư luận xã hội, có thể tác động tiêu cực đến phát triển kinh tế - xã hội, môi trường đầu tư, kinh doanh và thị trường bất động sản.</p>", new java.util.Date(), "Thủ tướng Chính phủ Phạm Minh Chính vừa ký ban hành Công điện 134/CĐ-TTg ngày 14/12/2024 yêu cầu các bộ liên quan, các địa phương kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất.");
+    ArrayList<Comment> comments = new ArrayList<>();
+    comments.add(new Comment("1", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quod, voluptates, quae, quos quidem quia quibusdam dolorum doloremque nemo voluptatem.", "1", "Tên người dùng", new java.util.Date()));
+    comments.add(new Comment("2", "Lorem ipsum dolor sit amet consectetur adipisicing elit.", "1", "Peter Parker", new java.util.Date()));
+    comments.add(new Comment("3", "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint similique necessitatibus, et excepturi odio neque minima! Nemo fugiat commodi nulla libero tenetur illo laudantium repellat placeat debitis, in, velit laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, odit aperiam tenetur, doloremque ad corrupti dicta repellat molestias id laborum voluptas, natus nostrum? Repudiandae error pariatur deserunt, repellendus assumenda est?", "1", "John Doe 123", new java.util.Date()));
+    ArrayList<Article> relatedArticles = new ArrayList<>();
+    relatedArticles.add(new Article("2", "Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức Bà", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/YZmStSDTjb0M07hFJ2gA/files/2024/12/01/mao-gai-131224-1.jpg", "", null, ""));
+    relatedArticles.add(new Article("3", "Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng 14/12", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/2014/01/02/19/21/1saobang.jpg", "", null, ""));
+    relatedArticles.add(new Article("4", "Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An Khê do mưa lớn", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/ket-xe-131224.jpg", "", null, ""));
+    relatedArticles.add(new Article("5", "Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/bi1-131224.jpg", "", null, ""));
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,22 +79,19 @@
       <div class="main-wrapper flex gap-4">
         <section id="home-articles" class="flex-1">
           <h1 id="title" class="w-full text-4xl font-bold font-playfair mb-4">
-            Thủ tướng Chính phủ yêu cầu kịp thời chấn chỉnh công tác đấu giá
-            quyền sử dụng đất
+            <%= article.getTitle() %>
           </h1>
           <div
             class="py-4 flex items-center justify-between border-y border-gray-200 mb-4"
           >
             <div class="[&>span]:text-sm [&>span]:text-gray-700">
-              <span id="createdAt" class="">Thứ tư, 15/12/2024, 10:00</span>
+              <span id="createdAt" class=""><%= sdf.format(article.getCreatedAt()) %></span>
               <span> | </span>
-              <span id="subject" class="">Thời sự</span>
+              <span id="subject" class=""><%= article.getSubjectId() %></span>
             </div>
           </div>
           <p id="introduction" class="w-full font-bold">
-            Thủ tướng Chính phủ Phạm Minh Chính vừa ký ban hành Công điện
-            134/CĐ-TTg ngày 14/12/2024 yêu cầu các bộ liên quan, các địa phương
-            kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất.
+            <%= article.getIntroduce() %>
           </p>
           <div
             id="content"
@@ -86,59 +99,12 @@
           >
             <img
               class="w-fit mx-10 object-cover pb-2"
-              src="https://cdnmedia.baotintuc.vn/Upload/DMDnZyELa7xUDTdLsa19w/files/2024/12/1412/dau-gia-141224.jpg"
-              alt="Đấu giá đất tại huyện Mê Linh (Hà Nội). Ảnh: Minh Nghĩa/TTXVN"
+              src="<%= article.getThumbnail() %>"
+              alt="Article Thumbnail"
             />
-            <p>
-              Công điện gửi Bộ trưởng các Bộ: Tài nguyên và Môi trường, Xây
-              dựng, Tài chính, Tư pháp, Công an; Chủ tịch Ủy ban nhân dân các
-              tỉnh, thành phố trực thuộc Trung ương.
-            </p>
-            <p>
-              Công điện nêu: Ngày 21/8/2024, Thủ tướng Chính phủ đã có Công điện
-              số 82/CĐ-TTg chỉ đạo các địa phương kịp thời chấn chỉnh công tác
-              đấu giá quyền sử dụng đất và đã đạt kết quả nhất định, từng bước
-              đưa công tác đấu giá quyền sử dụng đất đi vào nề nếp, góp phần bổ
-              sung nguồn thu cho ngân sách địa phương. Tuy nhiên, công tác tổ
-              chức đấu giá quyền sử dụng đất tại một số địa phương vẫn còn những
-              tồn tại, hạn chế nhất định như hiện tượng người tham gia đấu giá
-              trả giá cao bất thường, có dấu hiệu thổi giá, hoặc thông đồng, cấu
-              kết thao túng giá để trục lợi, gây nhiễu loạn thị trường, ảnh
-              hưởng đến sự phát triển lành mạnh của thị trường bất động sản.
-              Tình trạng này đang thu hút sự quan tâm của dư luận xã hội, có thể
-              tác động tiêu cực đến phát triển kinh tế - xã hội, môi trường đầu
-              tư, kinh doanh và thị trường bất động sản.
-            </p>
-            <p>
-              Để nâng cao hiệu lực, hiệu quả công tác đấu giá quyền sử dụng đất,
-              góp phần lành mạnh hóa thị trường bất động sản, cải thiện môi
-              trường đầu tư, kinh doanh, thúc đẩy phát triển kinh tế - xã hội,
-              Thủ tướng Chính phủ yêu cầu Chủ tịch Ủy ban nhân dân các tỉnh,
-              thành phố trực thuộc Trung ương chỉ đạo các cơ quan, đơn vị chức
-              năng rà soát công tác tổ chức đấu giá quyền sử dụng đất trên địa
-              bàn đảm bảo đúng pháp luật, công khai, minh bạch; kịp thời phát
-              hiện, xử lý nghiêm các trường hợp vi phạm các quy định của pháp
-              luật trong đấu giá quyền sử dụng đất, ngăn chặn hành vi lợi dụng
-              đấu giá quyền sử dụng đất để trục lợi, gây nhiễu loạn thị trường.
-            </p>
-            <p>
-              Trong đó tập trung thực hiện các giải pháp sau: Tổ chức công khai
-              quy hoạch, kế hoạch sử dụng đất, quy hoạch xây dựng, quy hoạch đô
-              thị khu vực tổ chức đấu giá quyền sử dụng đất và các khu vực lân
-              cận; có biện pháp bảo đảm nguồn cung bất động sản nhà ở, đất ở phù
-              hợp với khả năng tiếp cận và thanh toán của đại đa số người dân có
-              nhu cầu, khắc phục tình trạng mất cân đối cung - cầu trên thị
-              trường bất động sản.
-            </p>
-            <p>
-              Trước khi xác định giá khởi điểm theo bảng giá đất phục vụ công
-              tác đấu giá quyền sử dụng đất phải tiến hành rà soát, điều chỉnh,
-              bổ sung giá đất tương ứng trong bảng giá đất tại khu vực, vị trí
-              tổ chức đấu giá theo quy định của pháp luật về đất đai, bảo đảm
-              giá khởi điểm đưa ra đấu giá phải phù hợp với điều kiện cơ sở hạ
-              tầng đã đầu tư và mặt bằng giá đất thực tế tại khu vực tổ chức đấu
-              giá.
-            </p>
+            <div id="articleContent" class="w-full space-y-4">
+              <%= article.getContent() %>
+            </div>
             <div class="w-full text-right font-semibold text-gray-500">
               Báo Tin tức
             </div>
@@ -156,60 +122,78 @@
             <div
               class="w-full bg-gray-100 px-3 [&>div]:py-3 [&>div]:flex [&>div]:gap-3"
             >
+              <% for (Article relatedArticle : relatedArticles) { %>
               <div class="border-b border-gray-200">
                 <img
                   class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/YZmStSDTjb0M07hFJ2gA/files/2024/12/01/mao-gai-131224-1.jpg"
-                  alt="Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức Bà"
+                  src="<%= relatedArticle.getThumbnail() %>"
+                  alt="<%= relatedArticle.getTitle() %>"
                 />
                 <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức
-                    Bà Nhà</a
-                  >
+                  <a href="<%= path %>/views/article.jsp?id=<%= relatedArticle.getId() %>">
+                    <%= relatedArticle.getTitle() %>
+                  </a>
                 </h2>
               </div>
-              <div class="border-b border-gray-200">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/2014/01/02/19/21/1saobang.jpg"
-                  alt="Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng 14/12"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng
-                    14/12</a
-                  >
-                </h2>
-              </div>
-              <div class="border-b border-gray-200">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/ket-xe-131224.jpg"
-                  alt="Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An
-                  Khê do mưa lớn"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An
-                    Khê do mưa lớn</a
-                  >
-                </h2>
-              </div>
-              <div class="">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/bi1-131224.jpg"
-                  alt="Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU</a
-                  >
-                </h2>
-              </div>
+              <% } %>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="main-wrapper flex gap-4 mt-6" id="comment-section">
+        <div class="w-full space-y-2 flex-1">
+          <div
+            class="h-9 w-full bg-gray-100 border-b-[2px] border-gray-300 flex px-4 items-center uppercase text-[#d21d21] pt-0.5 font-semibold"
+          >
+            Ý kiến bạn đọc
+          </div>
+          <div class="py-5 px-6 w-full bg-gray-100 space-y-6">
+            <% for (Comment comment : comments) { %>
+            <div class="w-full flex gap-4">
+              <span
+                class="size-9 rounded-full flex-center bg-[#ed1b24] text-xl text-white mt-1"
+              >
+                <i class="ph-fill ph-user"></i>
+              </span>
+              <div class="flex-1">
+                <div>
+                  <span class="font-semibold text-sm"><%= comment.getCreatorId() %></span>
+                  <span class="text-gray-500 ml-2 text-[13px] leading-4"><%= sdf2.format(comment.getCreatedAt()) %></span>
+                </div>
+                <p class="text-sm text-gray-700 text-[13px] leading-[18px]">
+                  <%= comment.getContent() %>
+                </p>
+              </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <div class="w-[320px] space-y-2">
+          <div
+            class="h-9 w-full bg-gray-100 border-b-[2px] border-gray-300 flex px-4 items-center uppercase pt-0.5 font-semibold text-[#d21d21] text-sm"
+          >
+            Gửi bình luận của bạn
+          </div>
+          <form
+            class="flex flex-col gap-3 items-end p-4 pb-3 w-full bg-gray-100"
+            action="<%= path %>/sendComment"
+            method="POST"
+          >
+            <textarea
+              class="w-full focus:outline-none focus:ring-0 p-2 rounded-sm border focus:border-[#ed1b24]/40 text-sm text-gray-600 resize-none"
+              name="comment"
+              id="comment"
+              placeholder="Nhập bình luận của bạn tại đây..."
+              rows="6"
+              required
+            ></textarea>
+            <button
+              class="h-7 px-4 bg-[#ed1b24]/80 hover:bg-[#ed1b24]/100 disabled:bg-[#ed1b24]/60 text-sm text-white rounded-sm font-semibold transition-colors"
+              type="submit"
+            >
+              Gửi đi
+            </button>
+          </form>
         </div>
       </div>
     </main>

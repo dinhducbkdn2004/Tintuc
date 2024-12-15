@@ -1,4 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="models.bean.Article" %>
+<%@ page import="java.util.ArrayList" %>
+<%
+    String path = request.getContextPath();
+    ArrayList<Article> articles = new ArrayList<>();
+    articles.add(new Article("1", "Đại tướng Phan Văn Giang: Cán bộ lãnh đạo cấp cao của Quân đội phải đặc biệt tiêu biểu, thực sự nêu gương", "Thời sự", "https://cdnthumb.baotintuc.vn/ha_w/600/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/quan-doi2-131224.jpg", "Chiều 13/12, tại Hà Nội, Quân ủy Trung ương, Bộ Quốc phòng tổ chức Lễ trao Huân chương tặng cán bộ cấp cao Quân đội nhân dân Việt Nam.", new java.util.Date(), ""));
+    articles.add(new Article("2", "Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức Bà", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/YZmStSDTjb0M07hFJ2gA/files/2024/12/01/mao-gai-131224-1.jpg", "", new java.util.Date(), ""));
+    articles.add(new Article("3", "Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng 14/12", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/2014/01/02/19/21/1saobang.jpg", "", new java.util.Date(), ""));
+    articles.add(new Article("4", "Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An Khê do mưa lớn", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/ket-xe-131224.jpg", "", new java.util.Date(), ""));
+    articles.add(new Article("5", "Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/bi1-131224.jpg", "", new java.util.Date(), ""));
+%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -72,76 +83,34 @@
             <div
               class="w-[280px] bg-gray-100 px-3 [&>div]:py-3 [&>div]:flex [&>div]:gap-3"
             >
+              <% for (int i = 1; i < articles.size(); i++) { %>
               <div class="border-b border-gray-200">
                 <img
                   class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/YZmStSDTjb0M07hFJ2gA/files/2024/12/01/mao-gai-131224-1.jpg"
-                  alt="Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức Bà"
+                  src="<%= articles.get(i).getThumbnail() %>"
+                  alt="<%= articles.get(i).getTitle() %>"
                 />
                 <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức
-                    Bà Nhà</a
-                  >
+                  <a href="<%= path %>/views/article.jsp?id=<%= articles.get(i).getId() %>">
+                    <%= articles.get(i).getTitle() %>
+                  </a>
                 </h2>
               </div>
-              <div class="border-b border-gray-200">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/2014/01/02/19/21/1saobang.jpg"
-                  alt="Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng 14/12"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng
-                    14/12</a
-                  >
-                </h2>
-              </div>
-              <div class="border-b border-gray-200">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/ket-xe-131224.jpg"
-                  alt="Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An
-                  Khê do mưa lớn"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An
-                    Khê do mưa lớn</a
-                  >
-                </h2>
-              </div>
-              <div class="">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/bi1-131224.jpg"
-                  alt="Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="#"
-                    >Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU</a
-                  >
-                </h2>
-              </div>
+              <% } %>
             </div>
             <div class="flex-1 h-10 space-y-2">
               <img
                 class="w-full object-cover aspect-[5/3]"
-                src="https://cdnthumb.baotintuc.vn/ha_w/600/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/quan-doi2-131224.jpg"
-                alt="Đại tướng Phan Văn Giang: Cán bộ lãnh đạo cấp cao của Quân đội phải đặc biệt tiêu biểu, thực sự nêu gương"
+                src="<%= articles.get(0).getThumbnail() %>"
+                alt="<%= articles.get(0).getTitle() %>"
               />
               <h2 class="font-playfair text-2xl font-bold">
-                <a
-                  href="./views/article.jsp"
-                  >Đại tướng Phan Văn Giang: Cán bộ lãnh đạo cấp cao của Quân
-                  đội phải đặc biệt tiêu biểu, thực sự nêu gương</a
-                >
+                <a href="<%= path %>/views/article.jsp?id=<%= articles.get(0).getId() %>">
+                  <%= articles.get(0).getTitle() %>
+                </a>
               </h2>
               <p class="text-sm text-gray-600">
-                Chiều 13/12, tại Hà Nội, Quân ủy Trung ương, Bộ Quốc phòng tổ
-                chức Lễ trao Huân chương tặng cán bộ cấp cao Quân đội nhân dân
-                Việt Nam.
+                <%= articles.get(0).getIntroduce() %>
               </p>
             </div>
           </div>

@@ -9,12 +9,13 @@ public class ConnectDB {
         Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tintuc", "root", "");
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/tintuc?useUnicode=true&characterEncoding=UTF-8",
+                    "root",
+                    "");
         } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(e);
+            e.printStackTrace();
         }
         return connection;
     }
-
 }

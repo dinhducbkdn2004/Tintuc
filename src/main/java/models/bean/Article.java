@@ -7,6 +7,7 @@ public class Article {
     private String id;
     private String title;
     private String subjectId;
+    private String subject;
     private String thumbnail;
     private String content;
     private Date createdAt;
@@ -48,6 +49,14 @@ public class Article {
 
     public void setSubjectId(String subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getThumbnail() {

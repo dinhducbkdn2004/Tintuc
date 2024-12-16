@@ -177,4 +177,9 @@ public class ArticleDAO {
 	        article.setIntroduce(resultSet.getString("introduce"));
 	        return article;
 	    }
+//
+//		public static List<Article> getArticleById() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 	}

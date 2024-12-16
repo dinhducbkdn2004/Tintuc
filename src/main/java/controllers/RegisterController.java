@@ -40,6 +40,13 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String name = request.getParameter("name");
 
+        // Kiểm tra nếu người dùng đã tồn tại
+        if (userBO.isUserExist(username)) {
+            request.setAttribute("usernameError", "Tên đăng nhập đã tồn tại");
+            request.getRequestDispatcher("/views/register.jsp").forward(request, response);
+            return;
+        }
+
         User user = new User(username, password, name);
         boolean success = userBO.registerUser(user);
 

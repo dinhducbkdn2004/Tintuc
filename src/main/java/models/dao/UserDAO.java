@@ -50,4 +50,20 @@ public class UserDAO {
             return false;
         }
     }
+
+    public boolean isUserExist(String username) {
+        try (Connection conn = ConnectDB.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM user WHERE username = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

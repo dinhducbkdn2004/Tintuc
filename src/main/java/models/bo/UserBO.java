@@ -17,4 +17,8 @@ public class UserBO {
     public boolean registerUser(User user) {
         return userDAO.insertUser(user);
     }
+
+    public boolean isUserExist(String username) {
+        return userDAO.isUserExist(username);
+    }
 }

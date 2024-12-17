@@ -11,38 +11,42 @@ import utils.ConnectDB;
 
 public class ArticleDAO {
 
-   
-
-	// Lấy tất cả bài viết
     public List<Article> getAllArticles() {
         List<Article> articles = new ArrayList<>();
-        String sql = "SELECT * FROM Article";
+        String sql = "SELECT *, s.name AS subjectName FROM Article a JOIN Subject s ON a.subjectId = s.id";
 
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                articles.add(mapResultSetToArticle(resultSet));
+                Article article = mapResultSetToArticle(resultSet);
+                article.setSubject(resultSet.getString("subjectName"));
+                articles.add(article);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return articles;
     }
 
-    // Lấy danh sách bài viết theo subjectId
-    public List<Article> getArticlesBySubject(String subjectId) {
+    public List<Article> getArticlesBySubject(String subjectId, int limit, int offset) {
         List<Article> articles = new ArrayList<>();
-        String sql = "SELECT * FROM Article WHERE subjectId = ?";
-
+        // lấy ra các bài viết theo chủ đề mới nhất và theo trang
+        String sql = "SELECT *, s.name AS subjectName FROM Article a JOIN Subject s ON a.subjectId = s.id WHERE a.subjectId = ? ORDER BY a.createdAt DESC LIMIT ? OFFSET ?";
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, subjectId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    articles.add(mapResultSetToArticle(resultSet));
+                    Article article = mapResultSetToArticle(resultSet);
+                    article.setSubject(resultSet.getString("subjectName"));
+                    articles.add(article);
                 }
             }
         } catch (SQLException e) {
@@ -51,32 +55,32 @@ public class ArticleDAO {
         return articles;
     }
 
-    // Lấy bài viết theo ID
     public Article getArticleById(String articleId) {
-        String sql = "SELECT * FROM Article WHERE id = ?";
+        String sql = "SELECT *, s.name AS subjectName FROM Article a JOIN Subject s ON a.subjectId = s.id WHERE a.id = ?";
+        Article article = null;
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, articleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return mapResultSetToArticle(resultSet);
+                    article = mapResultSetToArticle(resultSet);
+                    article.setSubject(resultSet.getString("subjectName"));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return article;
     }
 
-    // Lấy các bài viết nổi bật (Home, vị trí 1-5)
     public List<Article> getHighlightedArticles() {
         List<Article> articles = new ArrayList<>();
         String sql = "SELECT a.* FROM Article a JOIN Home h ON a.id = h.articleId WHERE h.position BETWEEN 1 AND 5";
 
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
                 articles.add(mapResultSetToArticle(resultSet));
@@ -87,15 +91,13 @@ public class ArticleDAO {
         return articles;
     }
 
- // Thêm một bài viết mới
     public boolean addArticle(Article article) {
         String sql = "INSERT INTO Article (id, title, subjectId, thumbnail, content, createdAt, introduce) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-        	
-        	// Chuyển kiểu Date thành String
-        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String createdAtStr = sdf.format(article.getCreatedAt());
 
             statement.setString(1, article.getId());
@@ -103,7 +105,7 @@ public class ArticleDAO {
             statement.setString(3, article.getSubjectId());
             statement.setString(4, article.getThumbnail());
             statement.setString(5, article.getContent());
-            statement.setString(6, createdAtStr); // Chuyển ngày thành chuỗi
+            statement.setString(6, createdAtStr);
             statement.setString(7, article.getIntroduce());
 
             return statement.executeUpdate() > 0;
@@ -113,13 +115,11 @@ public class ArticleDAO {
         return false;
     }
 
-
-    // Cập nhật bài viết
     public boolean updateArticle(Article article) {
         String sql = "UPDATE Article SET title = ?, subjectId = ?, thumbnail = ?, content = ?, createdAt = ?, introduce = ? WHERE id = ?";
 
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String createdAtStr = sdf.format(article.getCreatedAt());
@@ -139,13 +139,11 @@ public class ArticleDAO {
         return false;
     }
 
-
-    // Xóa bài viết theo ID
     public boolean deleteArticle(String articleId) {
         String sql = "DELETE FROM Article WHERE id = ?";
 
         try (Connection connection = ConnectDB.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, articleId);
             return statement.executeUpdate() > 0;
@@ -155,31 +153,24 @@ public class ArticleDAO {
         return false;
     }
 
-    // Map dữ liệu từ ResultSet sang Article
-	    private Article mapResultSetToArticle(ResultSet resultSet) throws SQLException {
-	    	
-	        Article article = new Article();
-	        article.setId(resultSet.getString("id"));
-	        article.setTitle(resultSet.getString("title"));
-	        article.setSubjectId(resultSet.getString("subjectId"));
-	        article.setThumbnail(resultSet.getString("thumbnail"));
-	        article.setContent(resultSet.getString("content"));
-//	        article.setCreatedAt(resultSet.getString("createdAt"));
-	     // Chuyển đổi từ String sang Date
-	        String createdAtStr = resultSet.getString("createdAt");
-	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	        try {
-	            Date createdAt = (Date) sdf.parse(createdAtStr);
-	            article.setCreatedAt(createdAt);
-	        } catch (ParseException e) {
-	            e.printStackTrace();
-	        }
-	        article.setIntroduce(resultSet.getString("introduce"));
-	        return article;
-	    }
-//
-//		public static List<Article> getArticleById() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-	}
+    private Article mapResultSetToArticle(ResultSet resultSet) throws SQLException {
+
+        Article article = new Article();
+        article.setId(resultSet.getString("id"));
+        article.setTitle(resultSet.getString("title"));
+        article.setSubjectId(resultSet.getString("subjectId"));
+        article.setThumbnail(resultSet.getString("thumbnail"));
+        article.setContent(resultSet.getString("content"));
+
+        String createdAtStr = resultSet.getString("createdAt");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            java.util.Date createdAt = sdf.parse(createdAtStr);
+            article.setCreatedAt(createdAt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        article.setIntroduce(resultSet.getString("introduce"));
+        return article;
+    }
+}

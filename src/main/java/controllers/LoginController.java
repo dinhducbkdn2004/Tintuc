@@ -25,6 +25,7 @@ public class LoginController extends HttpServlet {
       throws ServletException, IOException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String redirectUrl = request.getParameter("redirect");
 
     User user = userBO.checkLogin(username, password);
 
@@ -34,12 +35,12 @@ public class LoginController extends HttpServlet {
       session.setMaxInactiveInterval(1800); // Session expires after 30 minutes
 
       if (user.getUserRole() == User.Role.admin) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/manage");
       } else {
-        response.sendRedirect(request.getContextPath());
+        response.sendRedirect(redirectUrl);
       }
     } else {
-      request.setAttribute("errorMessage", "Invalid username or password");
+      request.setAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không chính xác.");
       request.getRequestDispatcher("/views/login.jsp").forward(request, response);
     }
   }

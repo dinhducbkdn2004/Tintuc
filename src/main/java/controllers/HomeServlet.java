@@ -1,36 +1,41 @@
 package controllers;
 
-import models.dao.ArticleDAO;
 import models.bean.Article;
-import models.bo.UserBO;
 import models.bo.ArticleBO;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+@WebServlet({"/"})
 public class HomeServlet extends HttpServlet {
-	private ArticleBO ArticleBO;
+    private static final Logger LOGGER = Logger.getLogger(HomeServlet.class.getName());
+    private ArticleBO articleBO;
 
-	  public HomeServlet() {
-	    ArticleBO = new ArticleBO();}
-	  
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       
-    		ArticleBO articleBO = new ArticleBO(); // Tạo đối tượng ArticleDAO
-            List<Article> featuredArticles;
-			
-				featuredArticles = articleBO.getHighlightedArticles(); 
-			
-			
+    public HomeServlet() {
+        articleBO = new ArticleBO();
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            LOGGER.info("Fetching highlighted articles");
+            List<Article> featuredArticles = articleBO.getHighlightedArticles();
+            if (featuredArticles == null || featuredArticles.isEmpty()) {
+                LOGGER.warning("No highlighted articles found");
+            } else {
+                LOGGER.info("Highlighted articles fetched successfully");
+            }
             request.setAttribute("featuredArticles", featuredArticles);
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/index.jsp");
             dispatcher.forward(request, response);
-        
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error in HomeServlet", e);
+            throw new ServletException("Error in HomeServlet", e);
         }
-    
+    }
 }

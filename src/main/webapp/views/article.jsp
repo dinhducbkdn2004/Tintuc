@@ -1,23 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="javax.servlet.http.HttpServletRequest" %>
-<%@ page import="models.bean.Article, models.bean.Comment" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="models.bean.Article, models.bean.Comment, models.bean.User" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
     String path = request.getContextPath();
+    String currentUrl = ((HttpServletRequest) request).getRequestURL().toString();
     SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd/MM/yyyy, HH:mm", new java.util.Locale("vi", "VN"));
     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy, HH:mm", new java.util.Locale("vi", "VN"));
-    // Temporary data for testing
-    Article article = new Article("1", "Thủ tướng Chính phủ yêu cầu kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất", "Thời sự", "https://cdnmedia.baotintuc.vn/Upload/DMDnZyELa7xUDTdLsa19w/files/2024/12/1412/dau-gia-141224.jpg", "<p>Công điện gửi Bộ trưởng các Bộ: Tài nguyên và Môi trường, Xây dựng, Tài chính, Tư pháp, Công an; Chủ tịch Ủy ban nhân dân các tỉnh, thành phố trực thuộc Trung ương.</p><p>Công điện nêu: Ngày 21/8/2024, Thủ tướng Chính phủ đã có Công điện số 82/CĐ-TTg chỉ đạo các địa phương kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất và đã đạt kết quả nhất định, từng bước đưa công tác đấu giá quyền sử dụng đất đi vào nề nếp, góp phần bổ sung nguồn thu cho ngân sách địa phương. Tuy nhiên, công tác tổ chức đấu giá quyền sử dụng đất tại một số địa phương vẫn còn những tồn tại, hạn chế nhất định như hiện tượng người tham gia đấu giá trả giá cao bất thường, có dấu hiệu thổi giá, hoặc thông đồng, cấu kết thao túng giá để trục lợi, gây nhiễu loạn thị trường, ảnh hưởng đến sự phát triển lành mạnh của thị trường bất động sản. Tình trạng này đang thu hút sự quan tâm của dư luận xã hội, có thể tác động tiêu cực đến phát triển kinh tế - xã hội, môi trường đầu tư, kinh doanh và thị trường bất động sản.</p>", new java.util.Date(), "Thủ tướng Chính phủ Phạm Minh Chính vừa ký ban hành Công điện 134/CĐ-TTg ngày 14/12/2024 yêu cầu các bộ liên quan, các địa phương kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất.");
-    ArrayList<Comment> comments = new ArrayList<>();
-    comments.add(new Comment("1", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quod, voluptates, quae, quos quidem quia quibusdam dolorum doloremque nemo voluptatem.", "1", "Tên người dùng", new java.util.Date()));
-    comments.add(new Comment("2", "Lorem ipsum dolor sit amet consectetur adipisicing elit.", "1", "Peter Parker", new java.util.Date()));
-    comments.add(new Comment("3", "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint similique necessitatibus, et excepturi odio neque minima! Nemo fugiat commodi nulla libero tenetur illo laudantium repellat placeat debitis, in, velit laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, odit aperiam tenetur, doloremque ad corrupti dicta repellat molestias id laborum voluptas, natus nostrum? Repudiandae error pariatur deserunt, repellendus assumenda est?", "1", "John Doe 123", new java.util.Date()));
-    ArrayList<Article> relatedArticles = new ArrayList<>();
-    relatedArticles.add(new Article("2", "Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức Bà", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/YZmStSDTjb0M07hFJ2gA/files/2024/12/01/mao-gai-131224-1.jpg", "", null, ""));
-    relatedArticles.add(new Article("3", "Cơ hội chiêm ngưỡng mưa sao băng Geminids vào rạng sáng 14/12", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/2014/01/02/19/21/1saobang.jpg", "", null, ""));
-    relatedArticles.add(new Article("4", "Bình Định: Liên tiếp xảy ra tình trạng kẹt xe trên đèo An Khê do mưa lớn", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/ket-xe-131224.jpg", "", null, ""));
-    relatedArticles.add(new Article("5", "Triển vọng mới cho hợp tác quốc phòng Việt Nam - Bỉ - EU", "", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/bi1-131224.jpg", "", null, ""));
+    User user = (User) session.getAttribute("user");
+    Article article = (Article) request.getAttribute("article");
+    if (article == null) {
+        response.sendRedirect(path + "/views/404.jsp");
+        return;
+    }
+   	List<Comment> comments = (List<Comment>) request.getAttribute("comments");
+   	List<Article> relatedArticles = (List<Article>) request.getAttribute("relatedArticles");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +85,7 @@
             <div class="[&>span]:text-sm [&>span]:text-gray-700">
               <span id="createdAt" class=""><%= sdf.format(article.getCreatedAt()) %></span>
               <span> | </span>
-              <span id="subject" class=""><%= article.getSubjectId() %></span>
+              <span id="subject" class=""><%= article.getSubject() %></span>
             </div>
           </div>
           <p id="introduction" class="w-full font-bold">
@@ -122,20 +120,24 @@
             <div
               class="w-full bg-gray-100 px-3 [&>div]:py-3 [&>div]:flex [&>div]:gap-3"
             >
-              <% for (Article relatedArticle : relatedArticles) { %>
-              <div class="border-b border-gray-200">
-                <img
-                  class="w-[120px] object-cover aspect-[4/3]"
-                  src="<%= relatedArticle.getThumbnail() %>"
-                  alt="<%= relatedArticle.getTitle() %>"
-                />
-                <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                  <a href="<%= path %>/views/article.jsp?id=<%= relatedArticle.getId() %>">
-                    <%= relatedArticle.getTitle() %>
-                  </a>
-                </h2>
-              </div>
-              <% } %>
+                <% if (relatedArticles != null && relatedArticles.size() > 0) { %>
+                  <% for (Article relatedArticle : relatedArticles) { %>
+                  <div class="border-b border-gray-200">
+                    <img
+                    class="w-[120px] object-cover aspect-[4/3]"
+                    src="<%= relatedArticle.getThumbnail() %>"
+                    alt="<%= relatedArticle.getTitle() %>"
+                    />
+                    <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
+                    <a href="<%= path %>/views/article.jsp?id=<%= relatedArticle.getId() %>">
+                      <%= relatedArticle.getTitle() %>
+                    </a>
+                    </h2>
+                  </div>
+                  <% } %>
+                <% } else { %>
+                  <p class="py-28 text-base text-gray-600 font-semibold text-center">Không có bài viết nào.</p>
+                <% } %>
             </div>
           </div>
         </div>
@@ -148,23 +150,36 @@
             Ý kiến bạn đọc
           </div>
           <div class="py-5 px-6 w-full bg-gray-100 space-y-6">
-            <% for (Comment comment : comments) { %>
-            <div class="w-full flex gap-4">
-              <span
+            <% if (comments != null && comments.size() > 0) { %>
+              <% for (Comment comment : comments) { %>
+              <div class="w-full flex gap-4">
+                <span
                 class="size-9 rounded-full flex-center bg-[#ed1b24] text-xl text-white mt-1"
-              >
-                <i class="ph-fill ph-user"></i>
-              </span>
-              <div class="flex-1">
-                <div>
-                  <span class="font-semibold text-sm"><%= comment.getCreatorId() %></span>
-                  <span class="text-gray-500 ml-2 text-[13px] leading-4"><%= sdf2.format(comment.getCreatedAt()) %></span>
+                >
+                  <i class="ph-fill ph-user"></i>
+                </span>
+                <div class="flex-1">
+                  <div class="w-full flex items-center justify-between">
+                    <div>
+                      <span class="font-semibold text-sm"><%= comment.getCreatorId() %></span>
+                      <span class="text-gray-500 ml-2 text-[13px] leading-4"><%= sdf2.format(comment.getCreatedAt()) %></span>
+                  </div>
+                  <% if (user != null && (user.getUsername().equals(comment.getCreatorId()) || user.getUserRole() == User.Role.admin)) { %>
+                  <button class="size-6 text-gray-500 hover:text-[#ed1b24] rounded-full hover:bg-white/70 flex-center transition-colors translate-x-3"
+                  	title="Xóa bình luận"
+                    onClick="deleteComment('<%= comment.getCommentID() %>')"
+                  >
+                    <i class="ph-bold ph-trash"></i>
+                  </button>
+                  <% } %>
+                  </div>
+                  <p class="text-sm text-gray-700 text-[13px] leading-[18px]">
+                    <%= comment.getContent() %>
+                  </p>
                 </div>
-                <p class="text-sm text-gray-700 text-[13px] leading-[18px]">
-                  <%= comment.getContent() %>
-                </p>
               </div>
-            </div>
+              <% } } else { %>
+                  <p class="py-[71px] text-base text-gray-600 font-semibold text-center">Không có bình luận nào.</p>
             <% } %>
           </div>
         </div>
@@ -174,28 +189,77 @@
           >
             Gửi bình luận của bạn
           </div>
-          <form
-            class="flex flex-col gap-3 items-end p-4 pb-3 w-full bg-gray-100"
-            action="<%= path %>/sendComment"
-            method="POST"
-          >
-            <textarea
-              class="w-full focus:outline-none focus:ring-0 p-2 rounded-sm border focus:border-[#ed1b24]/40 text-sm text-gray-600 resize-none"
-              name="comment"
-              id="comment"
-              placeholder="Nhập bình luận của bạn tại đây..."
-              rows="6"
-              required
-            ></textarea>
-            <button
-              class="h-7 px-4 bg-[#ed1b24]/80 hover:bg-[#ed1b24]/100 disabled:bg-[#ed1b24]/60 text-sm text-white rounded-sm font-semibold transition-colors"
-              type="submit"
+          <% if (user != null) { %>    
+            <form
+              class="flex flex-col gap-3 items-end p-4 pb-3 w-full bg-gray-100"
+              action="<%= path %>/comment"
+              method="POST"
             >
-              Gửi đi
-            </button>
-          </form>
+              <textarea
+                class="w-full focus:outline-none focus:ring-0 p-2 rounded-sm border focus:border-[#ed1b24]/40 text-sm text-gray-600 resize-none"
+                name="content"
+                id="content"
+                placeholder="Nhập bình luận của bạn tại đây..."
+                rows="6"
+                required
+              ></textarea>
+              <input type="hidden" name="action" value="add">
+              <input type="hidden" name="articleId" value="<%= article.getId() %>">
+              <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+              <button
+                class="h-7 px-4 bg-[#ed1b24]/80 hover:bg-[#ed1b24]/100 disabled:bg-[#ed1b24]/60 text-sm text-white rounded-sm font-semibold transition-colors"
+                type="submit"
+              >
+                Gửi đi
+              </button>
+            </form>
+          <% } else { %>
+            <div class="w-full bg-gray-100 py-[71px] text-center">
+              <span class="text-base text-gray-600 font-semibold">
+              	<a href="<%= path %>/views/login.jsp?redirect=<%= path + "/article/" + article.getId() %>" class="hover:underline hover:text-[#ed1b24] mr-0.5">
+                  Đăng nhập
+                </a>
+                để bình luận</span>
+            </div>
+          <% } %>
         </div>
       </div>
     </main>
+    <script>
+      function deleteComment(commentId) {
+        if (confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) {
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '<%= path %>/comment';
+
+          const actionInput = document.createElement('input');
+          actionInput.type = 'hidden';
+          actionInput.name = 'action';
+          actionInput.value = 'delete';
+          form.appendChild(actionInput);
+
+          const commentIdInput = document.createElement('input');
+          commentIdInput.type = 'hidden';
+          commentIdInput.name = 'commentID';
+          commentIdInput.value = commentId;
+          form.appendChild(commentIdInput);
+
+          const articleIdInput = document.createElement('input');
+          articleIdInput.type = 'hidden';
+          articleIdInput.name = 'articleId';
+          articleIdInput.value = '<%= article.getId()%>' ;
+          form.appendChild(articleIdInput);
+
+          const csrfTokenInput = document.createElement('input');
+          csrfTokenInput.type = 'hidden';
+          csrfTokenInput.name = 'csrfToken';
+          csrfTokenInput.value = '<%= (String) session.getAttribute("csrfToken") %>';
+          form.appendChild(csrfTokenInput);
+
+          document.body.appendChild(form);
+          form.submit();
+        }
+      }
+    </script>
   </body>
 </html>

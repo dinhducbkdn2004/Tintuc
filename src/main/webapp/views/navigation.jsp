@@ -92,7 +92,7 @@
         </a>
         <% if (user != null && user.getUserRole() == User.Role.admin) { %>
             <div class="h-6 w-[1px] bg-white/50 mx-1"></div>
-            <a href="<%= path %>/views/manage.jsp" target="_parent">
+            <a href="<%= path %>/manage" target="_parent">
               <span
                 class="uppercase font-bold text-xs px-2 hover:text-amber-100 translate-y-[-1px]"
               >

@@ -1,19 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="models.bean.Article" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
     String path = request.getContextPath();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy, HH:mm", new java.util.Locale("vi", "VN"));
-    ArrayList<Article> articles = new ArrayList<>();
-    Article a1 = new Article("1", "Đại tướng Phan Văn Giang: Cán bộ lãnh đạo cấp cao của Quân đội phải đặc biệt tiêu biểu, thực sự nêu gương", "subject1", "https://cdnthumb.baotintuc.vn/ha_w/600/https@@$$media.baotintuc.vn/Upload/rGkvwNpj74Z1EcpzQ6ltA/files/2024/12/tuan5/quan-doi2-131224.jpg", "Chiều 13/12, tại Hà Nội, Quân ủy Trung ương, Bộ Quốc phòng tổ chức Lễ trao Huân chương tặng cán bộ cấp cao Quân đội nhân dân Việt Nam.", new java.util.Date(), "");
-    a1.setSubject("Chính trị");
+    List<Article> articles = (List<Article>) request.getAttribute("articles");
 
-    Article a2 = new Article("2", "Pháp: Thánh tích Mão gai của Chúa Jesus trở về Nhà thờ Đức Bà", "subject2", "https://cdnthumb.baotintuc.vn/ha_w/300/https@@$$media.baotintuc.vn/Upload/YZmStSDTjb0M07hFJ2gA/files/2024/12/01/mao-gai-131224-1.jpg", "", new java.util.Date(), "");
-    a2.setSubject("Xã hội");
-
-    articles.add(a1);
-    articles.add(a2);
+    if (articles == null) {
+        response.sendRedirect(path);
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,7 +84,7 @@
               <th class="border border-gray-300 px-4 py-2">ID</th>
               <th class="border border-gray-300 px-4 py-2">Tiêu đề</th>
               <th class="border border-gray-300 px-4 py-2 w-[200px]">Chuyên mục</th>
-              <th class="border border-gray-300 px-4 py-2 w-[180px]">Ngày tạo</th>
+              <th class="border border-gray-300 px-4 py-2 w-[180px]">Thời gian tạo</th>
               <th class="border border-gray-300 px-4 py-2">Hành động</th>
             </tr>
           </thead>

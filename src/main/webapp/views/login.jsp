@@ -4,9 +4,7 @@
 <%
     String path = request.getContextPath();
     String redirectUrl = request.getParameter("redirect");
-    if (redirectUrl == null || redirectUrl.isEmpty()) {
-        redirectUrl = path;
-    }
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +110,9 @@
               />
             </div>
             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-            <input type="hidden" name="redirect" value="<%= redirectUrl %>">
+            <% if (redirectUrl != null) { %>
+            	<input type="hidden" name="redirect" value="<%= redirectUrl %>">
+            <% } %>
             <div class="flex justify-between items-center">
               <div class="flex items-center">
                 <div class="relative">

@@ -128,6 +128,7 @@
               />
               <button
                 class="hover:text-[#ed1b24] active:text-[#bd191c] transition-colors"
+                onclick="search()"
               >
                 <svg
                   stroke="currentColor"
@@ -148,5 +149,23 @@
         </div>
       </div>
     </header>
+    <script>
+      const searchInput = document.getElementById("searchValue");
+
+      function search() {
+        let searchValue = searchInput.value;
+        if (searchValue.trim() === "") {
+          alert("Vui lòng nhập từ khóa tìm kiếm!");
+        } else {
+          window.parent.location.href = "<%= path %>/articles?search=" + searchValue;
+        }
+      }
+
+      searchInput.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+          search();
+        }
+      });
+    </script>
   </body>
 </html>

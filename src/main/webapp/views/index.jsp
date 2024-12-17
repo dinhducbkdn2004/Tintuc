@@ -61,7 +61,7 @@
       frameborder="0"
       loading="eager"
     ></iframe>
-    <main class="py-4">
+    <main class="py-6">
       <div class="main-wrapper flex gap-4">
         <section id="home-articles" class="flex-1">
           <div
@@ -87,7 +87,7 @@
                       alt="<%= articles.get(i).getTitle() %>"
                     />
                     <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                      <a href="<%= path %>/views/article.jsp?id=<%= articles.get(i).getId() %>">
+                      <a href="<%= path %>/article/<%= articles.get(i).getId() %>">
                         <%= articles.get(i).getTitle() %>
                       </a>
                     </h2>
@@ -105,11 +105,11 @@
                   alt="<%= articles.get(0).getTitle() %>"
                 />
                 <h2 class="font-playfair text-2xl font-bold">
-                  <a href="<%= path %>/views/article.jsp?id=<%= articles.get(0).getId() %>">
+                  <a href="<%= path %>/article/<%= articles.get(0).getId() %>">
                     <%= articles.get(0).getTitle() %>
                   </a>
                 </h2>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 line-clamp-3">
                   <%= articles.get(0).getIntroduce() %>
                 </p>
               </div>

@@ -22,7 +22,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang chủ</title>
+    <title><%= article.getTitle() %></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -31,6 +31,10 @@
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
       rel="stylesheet"
     />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -43,6 +47,43 @@
         font-family: "Playfair Display", serif;
         font-optical-sizing: auto;
         font-style: normal;
+      }
+      .ql-editor {
+        font-family: "Open Sans", sans-serif !important;
+        font-size: 16px !important;
+        font-weight: 500;
+        line-height: 26px;
+      }
+      .ql-editor h1 {
+        font-size: 18px !important;
+        font-weight: 600;
+        line-height: 28px;
+        margin: 4px 0 8px;
+      }
+      .ql-editor h2 {
+        font-size: 18px !important;
+        font-weight: 600;
+        line-height: 28px;
+        margin: 4px 0 6px;
+      }
+      .ql-editor h3 {
+        font-size: 17px !important;
+        font-weight: 500;
+        line-height: 26px;
+        margin: 4px 0 6px;
+      }
+      .ql-editor p {
+        font-size: 16px !important;
+        font-weight: 500;
+        line-height: 26px;
+        margin: 2px 0;
+      }
+      .ql-editor img, #thumbnail {
+        max-width: 85% !important;
+        width: auto;
+        height: auto;
+        margin: 2px auto;
+        object-fit: scale-down;
       }
     </style>
     <style type="text/tailwindcss">
@@ -64,14 +105,10 @@
     <iframe
       class="w-full h-[110px]"
       src="<%= path %>/views/header.jsp"
-      frameborder="0"
-      loading="eager"
     ></iframe>
     <iframe
       class="w-full h-8 sticky top-[-1px] z-10"
       src="<%= path %>/views/navigation.jsp"
-      frameborder="0"
-      loading="eager"
     ></iframe>
     <main class="py-4">
       <div class="main-wrapper flex gap-4">
@@ -87,23 +124,33 @@
               <span> | </span>
               <span id="subject" class=""><%= article.getSubject() %></span>
             </div>
+            <% if (user != null && user.getUserRole() == User.Role.admin) { %>
+                <a
+                  href="<%= path %>/manage/article/edit?id=<%= article.getId() %>"
+                  class="text-sm text-gray-500 hover:text-[#ed1b24] rounded-full hover:bg-white/70 flex-center transition-colors mr-1"
+                  title="Chỉnh sửa bài viết"
+                >
+                  <i class="ph-fill ph-pencil mr-1"></i>
+                  Chỉnh sửa
+                </a>
+            <% } %>
           </div>
           <p id="introduction" class="w-full font-bold">
             <%= article.getIntroduce() %>
           </p>
           <div
             id="content"
-            class="mt-6 pl-24 space-y-4 [&>p]:text-justify font-medium"
+            class="mt-6 pl-24 [&>p]:text-justify font-medium"
           >
             <img
-              class="w-fit mx-10 object-cover pb-2"
+              id="thumbnail"
               src="<%= article.getThumbnail() %>"
-              alt="Article Thumbnail"
+              alt="<%= article.getTitle() %>"
             />
-            <div id="articleContent" class="w-full space-y-4">
+            <div id="articleContent" class="w-full space-y-3 ql-editor -mt-6">
               <%= article.getContent() %>
             </div>
-            <div class="w-full text-right font-semibold text-gray-500">
+            <div class="w-full text-right font-semibold text-gray-500 -mt-12">
               Báo Tin tức
             </div>
             <div class="w-full h-[1.5px] bg-[#ed1b24]"></div>
@@ -126,10 +173,10 @@
                     <img
                     class="w-[120px] object-cover aspect-[4/3]"
                     src="<%= relatedArticle.getThumbnail() %>"
-                    alt="<%= relatedArticle.getTitle() %>"
+                    alt="article-thumb-<%= relatedArticle.getId() %>"
                     />
                     <h2 class="text-sm leading-[18px] font-semibold line-clamp-5">
-                    <a href="<%= path %>/views/article.jsp?id=<%= relatedArticle.getId() %>">
+                    <a href="<%= path %>/article/<%= relatedArticle.getId() %>">
                       <%= relatedArticle.getTitle() %>
                     </a>
                     </h2>
@@ -161,7 +208,7 @@
                 <div class="flex-1">
                   <div class="w-full flex items-center justify-between">
                     <div>
-                      <span class="font-semibold text-sm"><%= comment.getCreatorId() %></span>
+                      <span class="font-semibold text-sm"><%= comment.getCreator() %></span>
                       <span class="text-gray-500 ml-2 text-[13px] leading-4"><%= sdf2.format(comment.getCreatedAt()) %></span>
                   </div>
                   <% if (user != null && (user.getUsername().equals(comment.getCreatorId()) || user.getUserRole() == User.Role.admin)) { %>
@@ -216,10 +263,9 @@
           <% } else { %>
             <div class="w-full bg-gray-100 py-[71px] text-center">
               <span class="text-base text-gray-600 font-semibold">
-              	<a href="<%= path %>/views/login.jsp?redirect=<%= path + "/article/" + article.getId() %>" class="hover:underline hover:text-[#ed1b24] mr-0.5">
-                  Đăng nhập
-                </a>
-                để bình luận</span>
+              	<a href="<%= path %>/views/login.jsp?redirect=<%= path + "/article/" + article.getId() %>" class="underline hover:text-[#ed1b24] mr-0.5">Đăng nhập</a>
+                <p class="inline">để bình luận</p>
+              </span>
             </div>
           <% } %>
         </div>

@@ -4,18 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%
     String path = request.getContextPath();
-    // Temporary data for testing
-    ArrayList<Subject> subjects = new ArrayList<>();
-    subjects.add(new Subject("1", "Chính trị"));
-    subjects.add(new Subject("2", "Xã hội"));
-    subjects.add(new Subject("3", "Kinh tế"));
-    subjects.add(new Subject("4", "Văn hóa"));
-    subjects.add(new Subject("5", "Thể thao"));
-    subjects.add(new Subject("6", "Giáo dục"));
-    subjects.add(new Subject("7", "Sức khỏe"));
-    subjects.add(new Subject("8", "Du lịch"));
-    subjects.add(new Subject("9", "Công nghệ"));
-    subjects.add(new Subject("10", "Pháp luật"));
+    ArrayList<Subject> subjects = (ArrayList<Subject>) request.getAttribute("subjects");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,41 +32,41 @@
       body {
         font-family: "Open Sans", sans-serif;
       }
-      .ql-editor {
+            .ql-editor {
         font-family: "Open Sans", sans-serif !important;
-        font-size: 14px !important;
+        font-size: 16px !important;
         font-weight: 500;
-        line-height: 20px;
+        line-height: 26px;
       }
       .ql-editor h1 {
         font-size: 18px !important;
         font-weight: 600;
-        line-height: 24px;
+        line-height: 28px;
         margin: 4px 0 8px;
       }
       .ql-editor h2 {
-        font-size: 17px !important;
+        font-size: 18px !important;
         font-weight: 600;
-        line-height: 20px;
+        line-height: 28px;
         margin: 4px 0 6px;
       }
       .ql-editor h3 {
-        font-size: 16px !important;
+        font-size: 17px !important;
         font-weight: 500;
-        line-height: 18px;
+        line-height: 26px;
         margin: 4px 0 6px;
       }
       .ql-editor p {
-        font-size: 14px !important;
+        font-size: 16px !important;
         font-weight: 500;
-        line-height: 20px;
+        line-height: 26px;
         margin: 2px 0;
       }
-      .ql-editor img {
+      .ql-editor img, #thumbnail {
         max-width: 60% !important;
         width: auto;
         height: auto;
-        margin: 12px auto;
+        margin: 2px auto;
         object-fit: scale-down;
       }
     </style>
@@ -100,14 +89,10 @@
     <iframe
       class="w-full h-[110px]"
       src="<%= path %>/views/header.jsp"
-      frameborder="0"
-      loading="eager"
     ></iframe>
     <iframe
       class="w-full h-8 sticky top-[-1px] z-10"
       src="<%= path %>/views/navigation.jsp"
-      frameborder="0"
-      loading="eager"
     ></iframe>
     <main class="py-4">
       <form 
@@ -163,22 +148,30 @@
             Ảnh bìa:
           </label>
           <input
+            type="text"
+            id="thumbnail"
+            name="thumbnail"
+            class="flex-1 border border-gray-300 px-3 py-1.5 text-sm focus:outline-none"
+            placeholder="Nhập đường dẫn ảnh bìa..."
+            required
+          />
+          <%-- <input
             type="file"
             id="thumbnail"
             name="thumbnail"
             class="flex-1 border border-gray-300 px-3 py-1.5 text-sm focus:outline-none"
             accept="image/*"
             required
-          />
+          /> --%>
         </div>
         <div class="w-full flex gap-4 mb-4">
-          <label for="introduction" class="w-[120px] font-semibold mt-1">
+          <label for="introduce" class="w-[120px] font-semibold mt-1">
             Giới thiệu:
           </label>
           <textarea
             class="flex-1 border border-gray-300 p-3 text-sm focus:outline-none resize-none"
-            id="introduction"
-            name="introduction"
+            id="introduce"
+            name="introduce"
             rows="3"
             placeholder="Nhập giới thiệu bài viết..."
             required
@@ -192,6 +185,7 @@
             <div class="w-full" id="editor"></div>
           </div>
         </div>
+        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
         <div class="w-full flex gap-4 items-center mt-6 justify-end">
           <button
             type="submit"
@@ -216,7 +210,6 @@
         content.setAttribute("type", "hidden");
         content.setAttribute("name", "content");
         content.value = quill.root.innerHTML;
-        console.log(content.value);
         form.appendChild(content);
         form.submit();
       }

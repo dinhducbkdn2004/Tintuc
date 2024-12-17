@@ -12,6 +12,8 @@ import java.util.List;
 
 @WebServlet("/article/*")
 public class ArticleController extends HttpServlet {
+  private static final long serialVersionUID = 1L;
+
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     try {
@@ -20,19 +22,20 @@ public class ArticleController extends HttpServlet {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Article ID is missing");
         return;
       }
-
-      String id = pathInfo.substring(1);
+      int id = Integer.parseInt(pathInfo.substring(1));
       ArticleBO articleBO = new ArticleBO();
 
       Article article = articleBO.getArticleById(id);
       request.setAttribute("article", article);
-      
-      if (article != null) {
-          List<Comment> comments = new CommentBO().getCommentsByArticleId(id);
-          request.setAttribute("comments", comments);
 
-          List<Article> relatedArticles = articleBO.getArticlesBySubject(article.getSubjectId(), 5, 0);
-          request.setAttribute("relatedArticles", relatedArticles);
+      if (article != null) {
+        List<Comment> comments = new CommentBO().getCommentsByArticleId(id);
+        request.setAttribute("comments", comments);
+
+        List<Article> relatedArticles = articleBO.getArticlesWithFilter(null, article.getSubjectId(), 6, 0);
+        relatedArticles.removeIf(a -> a.getId() == article.getId());
+
+        request.setAttribute("relatedArticles", relatedArticles);
       }
 
       RequestDispatcher dispatcher = request.getRequestDispatcher("/views/article.jsp");

@@ -4,19 +4,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%
     String path = request.getContextPath();
-    // Temporary data for testing
-    Article article = new Article("1", "Thủ tướng Chính phủ yêu cầu kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất", "1", "https://cdnmedia.baotintuc.vn/Upload/DMDnZyELa7xUDTdLsa19w/files/2024/12/1412/dau-gia-141224.jpg", "<p>Công điện gửi Bộ trưởng các Bộ: Tài nguyên và Môi trường, Xây dựng, Tài chính, Tư pháp, Công an; Chủ tịch Ủy ban nhân dân các tỉnh, thành phố trực thuộc Trung ương.</p><p>Công điện nêu: Ngày 21/8/2024, Thủ tướng Chính phủ đã có Công điện số 82/CĐ-TTg chỉ đạo các địa phương kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất và đã đạt kết quả nhất định, từng bước đưa công tác đấu giá quyền sử dụng đất đi vào nề nếp, góp phần bổ sung nguồn thu cho ngân sách địa phương. Tuy nhiên, công tác tổ chức đấu giá quyền sử dụng đất tại một số địa phương vẫn còn những tồn tại, hạn chế nhất định như hiện tượng người tham gia đấu giá trả giá cao bất thường, có dấu hiệu thổi giá, hoặc thông đồng, cấu kết thao túng giá để trục lợi, gây nhiễu loạn thị trường, ảnh hưởng đến sự phát triển lành mạnh của thị trường bất động sản. Tình trạng này đang thu hút sự quan tâm của dư luận xã hội, có thể tác động tiêu cực đến phát triển kinh tế - xã hội, môi trường đầu tư, kinh doanh và thị trường bất động sản.</p>", new java.util.Date(), "Thủ tướng Chính phủ Phạm Minh Chính vừa ký ban hành Công điện 134/CĐ-TTg ngày 14/12/2024 yêu cầu các bộ liên quan, các địa phương kịp thời chấn chỉnh công tác đấu giá quyền sử dụng đất.");
-    ArrayList<Subject> subjects = new ArrayList<>();
-    subjects.add(new Subject("1", "Chính trị"));
-    subjects.add(new Subject("2", "Xã hội"));
-    subjects.add(new Subject("3", "Kinh tế"));
-    subjects.add(new Subject("4", "Văn hóa"));
-    subjects.add(new Subject("5", "Thể thao"));
-    subjects.add(new Subject("6", "Giáo dục"));
-    subjects.add(new Subject("7", "Sức khỏe"));
-    subjects.add(new Subject("8", "Du lịch"));
-    subjects.add(new Subject("9", "Công nghệ"));
-    subjects.add(new Subject("10", "Pháp luật"));
+    Article article = (Article) request.getAttribute("article");
+    ArrayList<Subject> subjects = (ArrayList<Subject>) request.getAttribute("subjects");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,11 +101,12 @@
     ></iframe>
     <main class="py-4">
       <form 
-      action="<%= path %>/article/update"
+      action="<%= path %>/manage/article/edit"
       method="post"
       class="main-wrapper block"
       onsubmit="submitForm(event)">
         <input type="hidden" name="id" value="<%= article.getId() %>">
+        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
         <div
           class="w-full h-11 bg-gray-100 flex items-center justify-between px-4 pt-1 mb-4"
         >
@@ -164,16 +154,25 @@
               </option>
             <% } %>
           </select>
-          <label for="thumbnail" class="ml-10 w-[100px] font-semibold">
-            Ảnh bìa mới:
+          <label for="thumbnail" class="ml-10 w-[80px] font-semibold">
+            Ảnh bìa :
           </label>
           <input
+            type="text"
+            id="thumbnail"
+            name="thumbnail"
+            class="flex-1 border border-gray-300 px-3 py-1.5 text-sm focus:outline-none"
+            value="<%= article.getThumbnail() %>"
+            placeholder="Nhập đường dẫn ảnh bìa..."
+            required
+          />
+          <%-- <input
             type="file"
             id="thumbnail"
             name="thumbnail"
             class="flex-1 border border-gray-300 px-3 py-1.5 text-sm focus:outline-none"
             accept="image/*"
-          />
+          /> --%>
         </div>
         <div class="w-full flex gap-4 mb-4">
           <label for="introduction" class="w-[120px] font-semibold mt-1">

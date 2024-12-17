@@ -16,11 +16,11 @@ public class ArticleBO {
 		return articleDAO.getAllArticles();
 	}
 
-	public List<Article> getArticlesBySubject(String subjectId, int limit, int offset) {
-		return articleDAO.getArticlesBySubject(subjectId, limit, offset);
+	public List<Article> getArticlesWithFilter(String searchValue, String subjectId, int limit, int offset) {
+		return articleDAO.getArticlesWithFilter(searchValue, subjectId, limit, offset);
 	}
 
-	public Article getArticleById(String articleId) {
+	public Article getArticleById(int articleId) {
 		return articleDAO.getArticleById(articleId);
 	}
 
@@ -28,7 +28,7 @@ public class ArticleBO {
 		return articleDAO.getHighlightedArticles();
 	}
 
-	public boolean addArticle(Article article) {
+	public int addArticle(Article article) {
 		return articleDAO.addArticle(article);
 	}
 
@@ -36,7 +36,7 @@ public class ArticleBO {
 		return articleDAO.updateArticle(article);
 	}
 
-	public boolean deleteArticle(String articleId) {
+	public boolean deleteArticle(int articleId) {
 		return articleDAO.deleteArticle(articleId);
 	}
 }

@@ -10,28 +10,30 @@ import java.util.List;
 
 @WebServlet("/subject/*")
 public class SubjectArticlesController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    try {
-      String pathInfo = request.getPathInfo();
-      if (pathInfo == null || pathInfo.equals("/")) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Subject ID is missing");
-        return;
-      }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			String pathInfo = request.getPathInfo();
+			if (pathInfo == null || pathInfo.equals("/")) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Subject ID is missing");
+				return;
+			}
 
-      String subjectId = pathInfo.substring(1);
-      int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 10;
-      int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
+			String subjectId = pathInfo.substring(1);
+			int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 10;
+			int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
 
-      ArticleBO articleBO = new ArticleBO();
+			ArticleBO articleBO = new ArticleBO();
 
-      List<Article> articles = articleBO.getArticlesBySubject(subjectId, limit, offset);
-      request.setAttribute("articles", articles);
+			List<Article> articles = articleBO.getArticlesWithFilter(null, subjectId, limit, offset);
+			request.setAttribute("articles", articles);
 
-      RequestDispatcher dispatcher = request.getRequestDispatcher("subject.jsp");
-      dispatcher.forward(request, response);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+			RequestDispatcher dispatcher = request.getRequestDispatcher("subject.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
